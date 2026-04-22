@@ -1,0 +1,48 @@
+{% extends 'blogapp/base.html' %} {% block body %}
+<div class="container py-4">
+	<div class="card mx-auto" style="max-width: 800px">
+		<h2 class="card-title mx-3 my-3">{{ post.title }}</h2>
+		{% if post.image %}
+		<img
+			src="{{ post.image.url }}"
+			class="card-img-top"
+			alt="{{ post.title }}"
+		/>
+		{% else %}
+		<img
+			src="/media/post_images/default.png"
+			class="card-img-top"
+			alt="Default post image"
+		/>
+		{% endif %}
+		<hr />
+		<div class="card-body">
+			<p class="text-body-secondary" style="font-size: 12px">
+				Created by {{ post.author }} on {{ post.created_at }}
+			</p>
+			<div class="card-text">{{ post.content | linebreaksbr }}</div>
+			<div class="mt-4 d-flex justify-content-between">
+				<a href="{% url 'home' %}" class="btn btn-outline-secondary">
+					<i class="fa-solid fa-left-long"></i>
+					Back</a
+				>
+				<div class="d-flex gap-3">
+					<a
+						href="{% url 'edit_post' post.id %}"
+						class="btn btn-outline-primary"
+					>
+						<i class="far fa-edit"></i>
+						Edit</a
+					>
+					<a href="{% url 'delete_post' post.id%}">
+						<button class="btn btn-outline-danger" type="submit">
+							<i class="fa-solid fa-trash-can"></i>
+							Delete
+						</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock body %}

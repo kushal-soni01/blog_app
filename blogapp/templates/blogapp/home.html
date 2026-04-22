@@ -1,0 +1,114 @@
+{% extends 'blogapp/base.html' %} {% block body %}
+<style>
+	.home-post-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+		justify-content: center;
+		gap: 1.5rem;
+		padding: 0 1rem 2rem;
+	}
+
+	.home-post-card {
+		width: 100%;
+		height: 100%;
+		min-height: 480px;
+		border: none;
+		border-radius: 18px;
+		overflow: hidden;
+		box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+	}
+
+	.home-post-card .card-img-top {
+		height: 220px;
+		width: 100%;
+		object-fit: cover;
+	}
+
+	.home-post-card .card-body {
+		display: flex;
+		flex-direction: column;
+		min-height: 190px;
+	}
+
+	.home-post-title,
+	.home-post-content {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.home-post-title {
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		min-height: 3rem;
+	}
+
+	.home-post-content {
+		-webkit-line-clamp: 4;
+		line-clamp: 4;
+		min-height: 6rem;
+	}
+
+	.home-post-meta {
+		margin-top: auto;
+		font-size: 0.9rem;
+	}
+
+	.home-post-actions {
+		display: flex;
+		gap: 0.5rem;
+		padding: 0 1rem 1rem;
+	}
+	.home-post-actions .btn:first-child {
+		margin-right: auto;
+	}
+</style>
+
+<div class="home-post-grid">
+	{% for post in posts %}
+	<div class="card home-post-card">
+		{% if post.image %}
+		<img
+			src="{{ post.image.url }}"
+			alt="{{ post.title }}"
+			class="card-img-top"
+		/>
+		{% else %}
+		<img
+			src="/media/post_images/default.png"
+			alt="Default post placeholder"
+			class="card-img-top"
+		/>
+		{% endif %}
+		<div class="card-body">
+			<h5 class="card-title home-post-title">
+				{{ post.title|truncatechars:70 }}
+			</h5>
+			<p class="card-text home-post-content">
+				{{ post.content|truncatechars:180 }}
+			</p>
+			<p class="card-subtitle text-body-secondary home-post-meta">
+				Last updated on {{ post.created_at }}
+			</p>
+		</div>
+		<div class="home-post-actions">
+			<a href="{% url 'post_detail' post.id %}">
+				<button class="btn btn-outline-secondary btn-sm" type="button">
+					Read More
+				</button>
+			</a>
+			<a href="{% url 'edit_post' post.id %}">
+				<button class="btn btn-outline-primary btn-sm" type="button">
+					<i class="far fa-edit"></i>
+				</button>
+			</a>
+			<a href="{% url 'delete_post' post.id%}">
+				<button class="btn btn-outline-danger btn-sm" type="submit">
+					<i class="fa-solid fa-trash-can"></i>
+				</button>
+			</a>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock body %}
