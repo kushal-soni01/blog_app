@@ -8,7 +8,10 @@ from . models import Post
 def home(request):
     view_mode = request.GET.get('view', 'all')
 
-    if view_mode == 'my' and request.user.is_authenticated:
+    if view_mode == 'my':
+        if not request.user.is_authenticated:
+            messages.error(request, "You need to be logged in to view your posts.")
+            return redirect('login')
         posts = Post.objects.filter(author=request.user).order_by('-created_at')
     else:
         posts = Post.objects.all().order_by('-created_at')
